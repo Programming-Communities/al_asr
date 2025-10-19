@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import { assets } from "../Assets/assets";
 
 // Detect if text is Urdu
 function isUrduTitle(text) {
