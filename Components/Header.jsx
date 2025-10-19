@@ -2,9 +2,6 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
-// Direct image imports
-import logo from "../Assets/images/logo.png";
-
 const Header = () => {
   const [isClient, setIsClient] = useState(false);
 
@@ -32,7 +29,7 @@ const Header = () => {
     <div className="py-5 px-5 md:px-12 lg:px-28 bg-gradient-to-b from-white to-red-50">
       <div className="flex justify-between items-center">
         <Image
-          src={logo}
+          src="/logo.png"  // ✅ Direct public path
           alt="Al-Asr Hussaini Calendar"
           width={180}
           height={100}
