@@ -28,15 +28,16 @@ const Header = () => {
   return (
     <div className="py-5 px-5 md:px-12 lg:px-28 bg-gradient-to-b from-white to-red-50">
       <div className="flex justify-between items-center">
-        <Image
-          src="/logo.png"  // ✅ Direct public path
-          alt="Al-Asr Hussaini Calendar"
-          width={180}
-          height={100}
-          className="w-[130px] sm:w-auto"
-          priority
-          sizes="(max-width: 640px) 130px, 180px"
-        />
+      <Image
+  src="/logo.png"
+  alt="Al-Asr Hussaini Calendar"
+  width={160}
+  height={60}
+  className="w-[130px] sm:w-auto h-auto" // ✅ Added h-auto
+  priority
+  sizes="(max-width: 640px) 130px, 180px"
+  loading="eager"
+/>
       </div>
       <div className="text-center my-12">
         <h1 className="text-3xl sm:text-5xl font-medium text-gray-800 mb-4">Al-Asr Hussaini Calendar</h1>

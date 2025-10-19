@@ -92,8 +92,6 @@ const BlogList = () => {
 
   return (
     <div className="container mx-auto px-4">
-      {/* REMOVED: Duplicate heading section */}
-
       {/* Category Filters */}
       <div className='flex justify-center gap-3 my-10 flex-wrap'>
         {categories.map((category) => (
@@ -114,7 +112,7 @@ const BlogList = () => {
       {/* Posts Grid */}
       {posts.length > 0 ? (
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16'>
-          {posts.map((post) => (
+          {posts.map((post, index) => (
             <BlogItem
               key={post.id}
               title={post.title}
@@ -123,6 +121,7 @@ const BlogList = () => {
               featuredImage={post.featuredImage?.node}
               date={post.date}
               slug={post.slug}
+              index={index} // ✅ Added index for image optimization
             />
           ))}
         </div>

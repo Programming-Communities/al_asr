@@ -2,9 +2,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-// Direct arrow import (if needed, or use SVG)
-// import arrow from "../Assets/images/arrow.png";
-
 // Detect if text is Urdu
 function isUrduTitle(text) {
   if (!text) return false;
@@ -12,7 +9,7 @@ function isUrduTitle(text) {
   return urduRegex.test(text);
 }
 
-const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug }) => {
+const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug, index = 0 }) => {
   // Strip HTML tags from excerpt and limit length
   const cleanExcerpt = excerpt 
     ? excerpt.replace(/<[^>]*>/g, '').substring(0, 120) + '...'
@@ -21,7 +18,7 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug }) => 
   // Get first category or default
   const category = categories && categories.length > 0 ? categories[0].name : 'General';
   
-  // Format date
+  // Format date - use static format to avoid hydration issues
   const formattedDate = new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
@@ -42,6 +39,8 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug }) => 
               fill
               className='border-b border-red-900 object-cover'
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              loading={index < 4 ? "eager" : "lazy"}
+              priority={index < 2}
             />
           ) : (
             <div className='flex items-center justify-center h-full bg-gradient-to-br from-red-50 to-red-100'>
@@ -90,4 +89,4 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug }) => 
   )
 }
 
-export default BlogItem;
+export default BlogItem
