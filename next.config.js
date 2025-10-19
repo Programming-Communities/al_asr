@@ -1,16 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['admin-al-asr.centers.pk'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'admin-al-asr.centers.pk',
+        pathname: '/**',
+      },
+    ],
   },
-  // Add this for alias support
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
       '@': __dirname,
-    }
-    return config
+    };
+    return config;
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
