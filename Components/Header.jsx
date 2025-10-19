@@ -1,8 +1,9 @@
 'use client'
-import { assets } from "../Assets/assets";
-
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+
+// Direct image imports
+import logo from "../Assets/images/logo.png";
 
 const Header = () => {
   const [isClient, setIsClient] = useState(false);
@@ -11,14 +12,11 @@ const Header = () => {
     setIsClient(true);
   }, []);
 
-  // Don't render Image during SSR to avoid hydration mismatch
   if (!isClient) {
     return (
       <div className="py-5 px-5 md:px-12 lg:px-28 bg-gradient-to-b from-white to-red-50">
         <div className="flex justify-between items-center">
-          {/* Simple placeholder during SSR */}
           <div className="w-[130px] sm:w-[180px] h-[60px] bg-gray-200 rounded animate-pulse"></div>
-          {/* Empty space for button */}
           <div className="w-0"></div>
         </div>
         <div className="text-center my-12">
@@ -34,7 +32,7 @@ const Header = () => {
     <div className="py-5 px-5 md:px-12 lg:px-28 bg-gradient-to-b from-white to-red-50">
       <div className="flex justify-between items-center">
         <Image
-          src={assets.logo}
+          src={logo}
           alt="Al-Asr Hussaini Calendar"
           width={180}
           height={100}
@@ -42,7 +40,6 @@ const Header = () => {
           priority
           sizes="(max-width: 640px) 130px, 180px"
         />
-        {/* Removed WordPress admin button */}
       </div>
       <div className="text-center my-12">
         <h1 className="text-3xl sm:text-5xl font-medium text-gray-800 mb-4">Al-Asr Hussaini Calendar</h1>

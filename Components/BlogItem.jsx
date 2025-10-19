@@ -1,7 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import { assets } from "../Assets/assets";
+
+// Direct arrow import (if needed, or use SVG)
+// import arrow from "../Assets/images/arrow.png";
 
 // Detect if text is Urdu
 function isUrduTitle(text) {
@@ -19,7 +21,7 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug }) => 
   // Get first category or default
   const category = categories && categories.length > 0 ? categories[0].name : 'General';
   
-  // Format date - use static format to avoid hydration issues
+  // Format date
   const formattedDate = new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
@@ -32,7 +34,6 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug }) => 
   return (
     <div className='max-w-[330px] bg-white border border-red-900 hover:shadow-[-7px_7px_0px_#8b0000bb] transition-all duration-300 cursor-pointer mx-auto'>
       <Link href={`/posts/${slug}`}>
-        {/* Image Container */}
         <div className='relative h-48 w-full bg-gray-200'>
           {featuredImage?.sourceUrl ? (
             <Image 
@@ -55,14 +56,12 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug }) => 
         </div>
       </Link>
       
-      {/* Category Badge */}
       <div className='px-5 pt-5'>
         <span className='inline-block bg-red-900 text-white text-xs px-3 py-1 rounded-full'>
           {category}
         </span>
       </div>
 
-      {/* Content */}
       <div className='p-5'>
         <Link href={`/posts/${slug}`}>
           <h3 className={`mb-3 text-lg font-semibold text-gray-900 line-clamp-2 min-h-[56px] leading-tight hover:text-red-700 transition-colors ${isUrdu ? 'urdu-text' : 'english-text'}`}>
@@ -74,7 +73,6 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug }) => 
           {cleanExcerpt}
         </p>
         
-        {/* Footer */}
         <div className='flex justify-between items-center pt-3 border-t border-gray-200'>
           <span className='text-xs text-gray-500 english-text'>{formattedDate}</span>
           <Link 
@@ -92,4 +90,4 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug }) => 
   )
 }
 
-export default BlogItem
+export default BlogItem;
