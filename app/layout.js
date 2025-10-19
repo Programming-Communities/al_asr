@@ -1,18 +1,18 @@
-import { Outfit } from "next/font/google";
+// app/layout.js
+import { jameelNoori } from '@/lib/fonts';
 import "./globals.css";
 
-const outfit = Outfit ({ subsets: ['latin'] , weight: ['400', '500', '600', '700'] })
-
 export const metadata = {
-  title: "Al Asr",
-  description: "Al Asr Hussaini Calendar",
+  title: "Al Asr - Hussaini Calendar",
+  description: "Al Asr Hussaini Calendar - Islamic Services",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={outfit.className}>{children}</body>
+    <html lang="ur" className={jameelNoori.variable}>
+      <body>
+        {children}
+      </body>
     </html>
   );
 }
