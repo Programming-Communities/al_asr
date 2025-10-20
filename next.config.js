@@ -1,15 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['admin-al-asr.centers.pk', 'al-asr.centers.pk'],
-    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'admin-al-asr.centers.pk',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'al-asr.centers.pk',
+        pathname: '/**',
+      },
     ],
+    formats: ['image/avif', 'image/webp'],
   },
   
   // Cache headers for static assets

@@ -3,6 +3,7 @@ import { GraphQLClient } from 'graphql-request';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 const client = new GraphQLClient('https://admin-al-asr.centers.pk/graphql');
 
@@ -67,8 +68,55 @@ function isUrduContent(text) {
   return totalCharCount > 0 && (urduCharCount / totalCharCount) > 0.3;
 }
 
-export default async function PostPage({ params }) {
-  const post = await getPost(params.slug);
+// PostPageSkeleton component
+const PostPageSkeleton = () => {
+  return (
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden animate-pulse">
+        {/* Featured Image Skeleton */}
+        <div className="h-96 w-full bg-gray-300"></div>
+
+        {/* Content Skeleton */}
+        <div className="p-8">
+          {/* Categories Skeleton */}
+          <div className="mb-4">
+            <div className="w-24 h-6 bg-gray-300 rounded-full"></div>
+          </div>
+
+          {/* Title Skeleton */}
+          <div className="h-8 bg-gray-300 rounded mb-4 w-3/4"></div>
+          <div className="h-8 bg-gray-300 rounded mb-6 w-1/2"></div>
+
+          {/* Meta Info Skeleton */}
+          <div className="flex items-center gap-4 mb-6 border-b border-gray-200 pb-4">
+            <div className="w-32 h-4 bg-gray-300 rounded"></div>
+            <div className="w-24 h-4 bg-gray-300 rounded"></div>
+          </div>
+
+          {/* Content Skeleton */}
+          <div className="space-y-4">
+            <div className="h-4 bg-gray-300 rounded w-full"></div>
+            <div className="h-4 bg-gray-300 rounded w-full"></div>
+            <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+            <div className="h-4 bg-gray-300 rounded w-full"></div>
+            <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+            <div className="h-4 bg-gray-300 rounded w-full"></div>
+            <div className="h-4 bg-gray-300 rounded w-2/3"></div>
+          </div>
+
+          {/* Back Button Skeleton */}
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <div className="w-32 h-6 bg-gray-300 rounded float-right"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// PostContent component
+async function PostContent({ slug }) {
+  const post = await getPost(slug);
   if (!post) notFound();
 
   // Detect language
@@ -93,6 +141,7 @@ export default async function PostPage({ params }) {
               fill
               className="object-cover"
               priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
             />
           </div>
         )}
@@ -129,7 +178,7 @@ export default async function PostPage({ params }) {
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
-          {/* Back Button - FIXED: Using Link instead of <a> */}
+          {/* Back Button */}
           <div className="mt-8 pt-6 border-t border-gray-200 text-right">
             <Link
               href="/"
@@ -145,6 +194,14 @@ export default async function PostPage({ params }) {
       </article>
     </div>
   );
+}
+
+export default async function PostPage({ params }) {
+  return (
+    <Suspense fallback={<PostPageSkeleton />}>
+      <PostContent slug={params.slug} />
+    </Suspense>
+  )
 }
 
 export async function generateMetadata({ params }) {
