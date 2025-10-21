@@ -1,4 +1,4 @@
-// app/posts/[slug]/page.js - Updated detection
+// app/posts/[slug]/page.js
 import { GraphQLClient } from 'graphql-request';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
@@ -27,10 +27,28 @@ async function getPost(slug) {
   const query = `
     query GetPost($slug: ID!) {
       post(id: $slug, idType: SLUG) {
-        id title content date
-        featuredImage { node { sourceUrl altText } }
-        categories { nodes { name slug } }
-        author { node { name } }
+        id 
+        title 
+        content 
+        date
+        excerpt
+        featuredImage { 
+          node { 
+            sourceUrl 
+            altText 
+          } 
+        }
+        categories { 
+          nodes { 
+            name 
+            slug 
+          } 
+        }
+        author { 
+          node { 
+            name 
+          } 
+        }
       }
     }
   `;
@@ -116,20 +134,56 @@ export async function generateMetadata({ params }) {
   
   if (!post) {
     return {
-      title: 'Post Not Found',
+      title: 'Post Not Found | Al-Asr ( Islamic Service )',
     };
   }
 
+  // Clean excerpt for description
+  const cleanExcerpt = post.excerpt?.replace(/<[^>]*>/g, '').substring(0, 160) + '...' || 
+                      post.content?.replace(/<[^>]*>/g, '').substring(0, 160) + '...' ||
+                      'Islamic services and community programs from Al-Asr ( Islamic Service )';
+
+  // Get featured image URL or default image
+  const imageUrl = post.featuredImage?.node?.sourceUrl || 
+                  'https://al-asr.centers.pk/og-image.jpg';
+
+  const fullUrl = `https://al-asr.centers.pk/posts/${slug}`;
+
   return {
-    title: `${post.title} | Al-Asr Hussaini Calendar`,
-    description: post.content?.replace(/<[^>]*>/g, '').substring(0, 160) + '...',
+    title: `${post.title} | Al-Asr ( Islamic Service )`,
+    description: cleanExcerpt,
+    
+    // Open Graph Meta Tags for WhatsApp/Facebook
     openGraph: {
       title: post.title,
-      description: post.content?.replace(/<[^>]*>/g, '').substring(0, 160) + '...',
+      description: cleanExcerpt,
+      url: fullUrl,
+      siteName: 'Al-Asr ( Islamic Service )',
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.featuredImage?.node?.altText || post.title,
+        },
+      ],
+      locale: 'ur_PK',
       type: 'article',
       publishedTime: post.date,
-      authors: [post.author?.node?.name || 'Al-Asr'],
-      images: post.featuredImage?.node?.sourceUrl ? [post.featuredImage.node.sourceUrl] : [],
+      authors: [post.author?.node?.name || 'Al-Asr ( Islamic Service )'],
+    },
+
+    // Twitter Card Meta Tags
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: cleanExcerpt,
+      images: [imageUrl],
+    },
+
+    // Additional Meta Tags
+    alternates: {
+      canonical: fullUrl,
     },
   };
 }

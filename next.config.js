@@ -1,64 +1,35 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'admin-al-asr.centers.pk',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'al-asr.centers.pk',
-        pathname: '/**',
-      },
-    ],
+    domains: ['admin-al-asr.centers.pk'],
     formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60,
   },
   
-  // Cache headers for static assets
   async headers() {
     return [
       {
-        source: '/:path*',
+        source: '/(.*)',
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
           },
-        ],
-      },
-      {
-        source: '/_next/static/:path*',
-        headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            key: 'X-Frame-Options',
+            value: 'DENY'
           },
-        ],
-      },
-      {
-        source: '/_next/image/:path*',
-        headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
+            key: 'X-XSS-Protection',
+            value: '1; mode=block'
+          }
         ],
       },
-    ];
+    ]
   },
   
-  // Compression
   compress: true,
-  
-  webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': __dirname,
-    };
-    return config;
-  },
-};
+  poweredByHeader: false,
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

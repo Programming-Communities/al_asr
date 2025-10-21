@@ -15,7 +15,7 @@ function isRTLText(text) {
 function PostSocialShareButtons({ title, slug, isRTL }) {
   const shareOnWhatsApp = () => {
     const url = `${window.location.origin}/posts/${slug}`;
-    const text = `📖 ${title}\n\nRead this amazing post from Al Asr Hussaini Calendar:\n${url}`;
+    const text = `📖 ${title}\n\nRead this amazing post from Al-Asr ( Islamic Service ):\n${url}`;
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
   };
 
