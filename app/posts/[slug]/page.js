@@ -1,10 +1,17 @@
-// app/posts/[slug]/page.js
+// app/posts/[slug]/page.js - Updated detection
 import { GraphQLClient } from 'graphql-request';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import PostClient from './PostClient';
 
 const client = new GraphQLClient('https://admin-al-asr.centers.pk/graphql');
+
+// Better RTL detection function
+function isRTLText(text) {
+  if (!text) return false;
+  const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\u0590-\u05FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+  return rtlRegex.test(text);
+}
 
 export async function generateStaticParams() {
   const query = `{ posts { nodes { slug } } }`;
@@ -78,20 +85,22 @@ async function PostContent({ slug }) {
   const post = await getPost(slug);
   if (!post) notFound();
 
-  // Detect if title is Urdu
-  function isUrduTitle(text) {
-    if (!text) return false;
-    const urduRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/;
-    return urduRegex.test(text);
-  }
+  // Better RTL detection - check both title and content
+  const isTitleRTL = isRTLText(post.title);
+  const isContentRTL = isRTLText(post.content);
+  const isUrdu = isTitleRTL || isContentRTL;
 
-  const isUrdu = isUrduTitle(post.title);
+  console.log('🔄 Server-side RTL Detection:', {
+    title: post.title,
+    isTitleRTL,
+    isContentRTL,
+    finalIsRTL: isUrdu
+  });
 
   return <PostClient post={post} slug={slug} isUrdu={isUrdu} />;
 }
 
 export default async function PostPage({ params }) {
-  // ✅ Correct way to get params in Next.js 15
   const slug = (await params).slug;
   
   return (
@@ -102,7 +111,6 @@ export default async function PostPage({ params }) {
 }
 
 export async function generateMetadata({ params }) {
-  // ✅ Correct way to get params in Next.js 15
   const slug = (await params).slug;
   const post = await getPost(slug);
   

@@ -4,8 +4,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/Components/Header';
 
+// RTL Text Detection Function
+function isRTLText(text) {
+  if (!text) return false;
+  const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\u0590-\u05FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+  return rtlRegex.test(text);
+}
+
 // Social Sharing Component
-function PostSocialShareButtons({ title, slug }) {
+function PostSocialShareButtons({ title, slug, isRTL }) {
   const shareOnWhatsApp = () => {
     const url = `${window.location.origin}/posts/${slug}`;
     const text = `📖 ${title}\n\nRead this amazing post from Al Asr Hussaini Calendar:\n${url}`;
@@ -17,22 +24,11 @@ function PostSocialShareButtons({ title, slug }) {
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
   };
 
-  const shareOnTwitter = () => {
-    const url = `${window.location.origin}/posts/${slug}`;
-    const text = `${title} - Al Asr Hussaini Calendar`;
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
-  };
-
-  const shareOnInstagram = () => {
-    const url = `${window.location.origin}/posts/${slug}`;
-    navigator.clipboard.writeText(url).then(() => {
-      alert('Link copied to clipboard! Paste it in your Instagram story or post.');
-    });
-  };
-
   return (
-    <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-      <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">Share this post:</span>
+    <div className={`flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+      <span className={`text-sm font-medium text-gray-700 dark:text-gray-300 ${isRTL ? 'ml-2' : 'mr-2'}`}>
+        Share this post:
+      </span>
       
       <button 
         onClick={shareOnWhatsApp}
@@ -51,30 +47,12 @@ function PostSocialShareButtons({ title, slug }) {
         <span>🔵</span>
         Facebook
       </button>
-      
-      <button 
-        onClick={shareOnTwitter}
-        className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors text-sm"
-        title="Share on Twitter"
-      >
-        <span>🐦</span>
-        Twitter
-      </button>
-      
-      <button 
-        onClick={shareOnInstagram}
-        className="flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors text-sm"
-        title="Share on Instagram"
-      >
-        <span>📸</span>
-        Instagram
-      </button>
     </div>
   );
 }
 
 // Post Meta Information Component
-function PostMetaInfo({ post, isUrdu }) {
+function PostMetaInfo({ post, isRTL }) {
   const readingTime = (content) => {
     const text = content.replace(/<[^>]*>/g, '');
     const words = text.split(/\s+/).length;
@@ -83,31 +61,36 @@ function PostMetaInfo({ post, isUrdu }) {
   };
 
   return (
-    <div className={`bg-gray-50 dark:bg-gray-800 p-6 rounded-lg mb-6 ${isUrdu ? 'text-right' : 'text-left'}`}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600 dark:text-gray-300">
-        <div className="flex items-center gap-2">
+    <div className={`bg-gray-50 dark:bg-gray-800 p-6 rounded-lg mb-6 ${isRTL ? 'text-right' : 'text-left'}`} dir={isRTL ? "rtl" : "ltr"}>
+      <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600 dark:text-gray-300`}>
+        <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
           <span className="text-red-900 dark:text-red-400">📖</span>
           <span>{readingTime(post.content)}</span>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
           <span className="text-red-900 dark:text-red-400">📅</span>
           <span>Published on {new Date(post.date).toLocaleDateString('en-US', {
             year: 'numeric', month: 'long', day: 'numeric'
           })}</span>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
           <span className="text-red-900 dark:text-red-400">👤</span>
           <span>By {post.author?.node?.name || 'Admin'}</span>
         </div>
       </div>
       
       {post.categories.nodes.length > 0 && (
-        <div className={`mt-4 ${isUrdu ? 'text-right' : 'text-left'}`}>
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">Categories:</span>
+        <div className={`mt-4 ${isRTL ? 'text-right' : 'text-left'}`}>
+          <span className={`text-sm font-medium text-gray-700 dark:text-gray-300 ${isRTL ? 'ml-2' : 'mr-2'}`}>
+            Categories:
+          </span>
           {post.categories.nodes.map((category, index) => (
-            <span key={category.slug} className="inline-block bg-red-900 dark:bg-red-800 text-white text-xs px-3 py-1 rounded-full mr-2 mb-2">
+            <span 
+              key={category.slug} 
+              className={`inline-block bg-red-900 dark:bg-red-800 text-white text-xs px-3 py-1 rounded-full ${isRTL ? 'ml-2' : 'mr-2'} mb-2`}
+            >
               {category.name}
             </span>
           ))}
@@ -119,18 +102,28 @@ function PostMetaInfo({ post, isUrdu }) {
 
 // Main Post Client Component
 export default function PostClient({ post, slug, isUrdu }) {
+  // Use the isUrdu prop from server-side detection
+  const isTitleRTL = isUrdu !== undefined ? isUrdu : isRTLText(post.title);
+  const isContentRTL = isRTLText(post.content);
+  const currentIsRTL = isTitleRTL || isContentRTL;
+
+  console.log('🔍 Post Language Detection:', {
+    title: post.title,
+    isUrduProp: isUrdu,
+    isTitleRTL,
+    isContentRTL,
+    finalIsRTL: currentIsRTL
+  });
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header Component - Same as Home Page */}
       <Header />
       
-      {/* Post Content Only - No Categories, No Related Posts */}
       <div className="py-8">
         <article 
           className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
-          dir={isUrdu ? "rtl" : "ltr"}
+          dir={currentIsRTL ? "rtl" : "ltr"}
         >
-          {/* Featured Image */}
           {post.featuredImage?.node?.sourceUrl && (
             <div className="relative h-96 w-full">
               <Image
@@ -144,38 +137,41 @@ export default function PostClient({ post, slug, isUrdu }) {
             </div>
           )}
 
-          {/* Content */}
           <div className="p-6 md:p-8">
-            {/* Title */}
-            <h1 className={`text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6 leading-tight ${isUrdu ? 'text-right urdu-text' : 'text-left english-text'}`}>
+            <h1 
+              className={`text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6 leading-tight ${
+                currentIsRTL ? 'text-right' : 'text-left'
+              }`}
+            >
               {post.title}
             </h1>
 
-            {/* Post Meta Information */}
-            <PostMetaInfo post={post} isUrdu={isUrdu} />
+            <PostMetaInfo post={post} isRTL={currentIsRTL} />
 
-            {/* Content with proper font */}
             <div 
-              className={`wp-content ${isUrdu ? 'urdu-text' : 'english-text'} max-w-none text-gray-700 dark:text-gray-300 leading-relaxed`}
-              style={{ 
-                direction: isUrdu ? 'rtl' : 'ltr',
-                textAlign: isUrdu ? 'right' : 'left',
-              }}
+              className={`wp-content max-w-none text-gray-700 dark:text-gray-300 ${
+                currentIsRTL ? 'urdu-arabic-content' : 'english-content'
+              }`}
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
 
-            {/* Social Share Buttons */}
             <div className="mt-8">
-              <PostSocialShareButtons title={post.title} slug={slug} />
+              <PostSocialShareButtons title={post.title} slug={slug} isRTL={currentIsRTL} />
             </div>
 
-            {/* Back Button */}
-            <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className={`mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 ${currentIsRTL ? 'text-right' : 'text-left'}`}>
               <Link
                 href="/"
-                className="inline-flex items-center text-red-900 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-semibold transition-colors"
+                className={`inline-flex items-center text-red-900 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-semibold transition-colors ${
+                  currentIsRTL ? 'flex-row-reverse' : ''
+                }`}
               >
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg 
+                  className={`${currentIsRTL ? 'ml-2 rotate-180' : 'mr-2'} w-4 h-4`} 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
                 Back to All Posts

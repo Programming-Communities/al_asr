@@ -1,3 +1,4 @@
+/* app/globals.css */
 @import "tailwindcss";
 
 :root {
@@ -11,42 +12,96 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Urdu text styling with system fonts */
-.urdu-text {
-  font-family: 'Urdu Typesetting', 'Nafees Web Naskh', 'Microsoft Sans Serif', Tahoma, sans-serif;
-  font-size: 1.3em;
-  line-height: 2.2;
-  direction: rtl;
-  text-align: right;
+/* ========== RTL/LTR TEXT STYLING ========== */
+/* Urdu/Arabic RTL Support - Strong Styling */
+.urdu-arabic-content {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  direction: rtl !important;
+  text-align: right !important;
+  line-height: 2 !important;
 }
 
-.english-text {
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.6;
+.urdu-arabic-content * {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.urdu-arabic-content p,
+.urdu-arabic-content div,
+.urdu-arabic-content span,
+.urdu-arabic-content li {
+  direction: rtl !important;
+  text-align: right !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+.urdu-arabic-content h1,
+.urdu-arabic-content h2,
+.urdu-arabic-content h3,
+.urdu-arabic-content h4,
+.urdu-arabic-content h5,
+.urdu-arabic-content h6 {
+  direction: rtl !important;
+  text-align: right !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+/* English LTR Support */
+.english-content {
+  font-family: inherit;
   direction: ltr;
   text-align: left;
+  line-height: 1.7;
+}
+
+/* Force RTL layout for entire article */
+[dir="rtl"] {
+  text-align: right !important;
+}
+
+[dir="rtl"] .text-right {
+  text-align: right !important;
+}
+
+[dir="rtl"] .flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .urdu-arabic-content {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+[dir="rtl"] .urdu-arabic-content * {
+  direction: rtl !important;
+  text-align: right !important;
 }
 
 /* WordPress Content Styling */
 .wp-content {
+  word-wrap: break-word;
   line-height: 1.8;
+}
+
+.wp-content * {
+  max-width: 100%;
 }
 
 .wp-content p {
   margin-bottom: 1rem;
 }
 
-.wp-content.urdu-text {
-  line-height: 2.2;
+.wp-content.urdu-arabic-content {
+  line-height: 2.2 !important;
   font-size: 1.3em;
-  text-align: right;
+  text-align: right !important;
 }
 
-.wp-content.urdu-text p {
+.wp-content.urdu-arabic-content p {
   margin-bottom: 1.5rem;
 }
 
-.wp-content.english-text {
+.wp-content.english-content {
   line-height: 1.7;
   font-size: 1.1em;
   text-align: left;
@@ -56,12 +111,16 @@ body {
   margin-bottom: 1rem;
 }
 
-.wp-content.urdu-text ul, .wp-content.urdu-text ol {
-  padding-right: 1.5rem;
-  padding-left: 0;
+.wp-content.urdu-arabic-content ul, 
+.wp-content.urdu-arabic-content ol {
+  padding-right: 1.5rem !important;
+  padding-left: 0 !important;
+  direction: rtl !important;
+  text-align: right !important;
 }
 
-.wp-content.english-text ul, .wp-content.english-text ol {
+.wp-content.english-content ul, 
+.wp-content.english-content ol {
   padding-left: 1.5rem;
   padding-right: 0;
 }
@@ -77,23 +136,24 @@ body {
   line-height: 1.3;
 }
 
-.wp-content.urdu-text h1, 
-.wp-content.urdu-text h2, 
-.wp-content.urdu-text h3, 
-.wp-content.urdu-text h4, 
-.wp-content.urdu-text h5, 
-.wp-content.urdu-text h6 {
-  text-align: right;
+.wp-content.urdu-arabic-content h1, 
+.wp-content.urdu-arabic-content h2, 
+.wp-content.urdu-arabic-content h3, 
+.wp-content.urdu-arabic-content h4, 
+.wp-content.urdu-arabic-content h5, 
+.wp-content.urdu-arabic-content h6 {
+  text-align: right !important;
   font-weight: normal;
   line-height: 1.8;
+  direction: rtl !important;
 }
 
-.wp-content.english-text h1, 
-.wp-content.english-text h2, 
-.wp-content.english-text h3, 
-.wp-content.english-text h4, 
-.wp-content.english-text h5, 
-.wp-content.english-text h6 {
+.wp-content.english-content h1, 
+.wp-content.english-content h2, 
+.wp-content.english-content h3, 
+.wp-content.english-content h4, 
+.wp-content.english-content h5, 
+.wp-content.english-content h6 {
   text-align: left;
 }
 
@@ -104,12 +164,12 @@ body {
 .wp-content h5 { font-size: 1.2rem; }
 .wp-content h6 { font-size: 1.1rem; }
 
-.wp-content.urdu-text h1 { font-size: 2.4rem; }
-.wp-content.urdu-text h2 { font-size: 2rem; }
-.wp-content.urdu-text h3 { font-size: 1.7rem; }
-.wp-content.urdu-text h4 { font-size: 1.5rem; }
-.wp-content.urdu-text h5 { font-size: 1.3rem; }
-.wp-content.urdu-text h6 { font-size: 1.2rem; }
+.wp-content.urdu-arabic-content h1 { font-size: 2.4rem; }
+.wp-content.urdu-arabic-content h2 { font-size: 2rem; }
+.wp-content.urdu-arabic-content h3 { font-size: 1.7rem; }
+.wp-content.urdu-arabic-content h4 { font-size: 1.5rem; }
+.wp-content.urdu-arabic-content h5 { font-size: 1.3rem; }
+.wp-content.urdu-arabic-content h6 { font-size: 1.2rem; }
 
 /* ========== DARK MODE STYLES ========== */
 .dark {
@@ -123,8 +183,8 @@ body {
 }
 
 /* Dark mode for Urdu and English text */
-.dark .urdu-text,
-.dark .english-text {
+.dark .urdu-arabic-content,
+.dark .english-content {
   color: #ededed;
 }
 
@@ -141,173 +201,6 @@ body {
 .dark .wp-content h6 {
   color: #ffffff;
 }
-
-/* Dark mode for blog cards */
-.dark .max-w-\\[330px\\] {
-  background-color: #1f2937 !important;
-  border-color: #374151 !important;
-}
-
-.dark .bg-white {
-  background-color: #1f2937 !important;
-}
-
-.dark .text-gray-900 {
-  color: #f3f4f6 !important;
-}
-
-.dark .text-gray-600 {
-  color: #d1d5db !important;
-}
-
-.dark .text-gray-500 {
-  color: #9ca3af !important;
-}
-
-.dark .border-gray-200 {
-  border-color: #374151 !important;
-}
-
-.dark .bg-gray-100 {
-  background-color: #374151 !important;
-}
-
-.dark .bg-gray-200 {
-  background-color: #4b5563 !important;
-}
-
-.dark .text-red-900 {
-  color: #fca5a5 !important;
-}
-
-.dark .hover\\:text-red-700:hover {
-  color: #f87171 !important;
-}
-
-.dark .border-red-900 {
-  border-color: #991b1b !important;
-}
-
-.dark .hover\\:shadow-\\[-7px_7px_0px_#8b0000bb\\]:hover {
-  box-shadow: -7px 7px 0px #7f1d1d !important;
-}
-
-/* Dark mode for category buttons */
-.dark .category-button {
-  background: #374151 !important;
-  border-color: #4b5563 !important;
-  color: #d1d5db !important;
-}
-
-.dark .category-button:hover {
-  background: #4b5563 !important;
-  color: #ffffff !important;
-}
-
-.dark .category-button.active {
-  background: #991b1b !important;
-  color: white !important;
-  border-color: #991b1b !important;
-  box-shadow: -4px 4px 0px #7f1d1d !important;
-}
-
-/* Dark mode for dropdown menus */
-.dark .subcategories-menu {
-  background: #1f2937 !important;
-  border-color: #374151 !important;
-}
-
-.dark .subcategory-item {
-  color: #d1d5db !important;
-  background: #1f2937 !important;
-}
-
-.dark .subcategory-item:hover {
-  background-color: #374151 !important;
-  color: #ffffff !important;
-}
-
-.dark .subcategory-item.active {
-  background-color: #7f1d1d !important;
-  color: #fef2f2 !important;
-}
-
-/* Dark mode for active filter badge */
-.dark .active-filter-badge {
-  background: #1e3a8a !important;
-  border-color: #3730a3 !important;
-  color: #dbeafe !important;
-}
-
-.dark .clear-filter-button {
-  color: #60a5fa !important;
-}
-
-.dark .clear-filter-button:hover {
-  color: #3b82f6 !important;
-}
-
-/* Dark mode for error and warning states */
-.dark .error-state {
-  background: #450a0a !important;
-  border-color: #7f1d1d !important;
-  color: #fecaca !important;
-}
-
-.dark .warning-state {
-  background: #451a03 !important;
-  border-color: #9a3412 !important;
-  color: #fed7aa !important;
-}
-
-/* Dark mode for social share buttons */
-.dark .bg-gray-100 {
-  background-color: #374151 !important;
-}
-
-.dark .hover\\:bg-gray-200:hover {
-  background-color: #4b5563 !important;
-}
-
-.dark .text-gray-600 {
-  color: #d1d5db !important;
-}
-
-/* Prevent Dark Reader from causing hydration issues */
-[data-darkreader-inline-bgcolor] {
-  background-color: inherit !important;
-}
-
-[data-darkreader-inline-color] {
-  color: inherit !important;
-}
-
-[data-darkreader-inline-fill] {
-  fill: inherit !important;
-}
-
-[data-darkreader-inline-stroke] {
-  stroke: inherit !important;
-}
-
-[data-darkreader-inline-border] {
-  border-color: inherit !important;
-}
-
-/* Force specific styles for dark mode compatibility */
-.dark [data-darkreader-inline-color] {
-  color: #ededed !important;
-}
-
-.dark [data-darkreader-inline-bgcolor] {
-  background-color: #0a0a0a !important;
-}
-
-
-
-
-
-
 
 /* ========== CATEGORIES DROPDOWN STYLING ========== */
 .category-dropdown {
@@ -488,21 +381,7 @@ body {
   color: #3b82f6;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ========== POST PAGE DARK MODE STYLES ========== */
+/* ========== DARK MODE COMPONENT STYLES ========== */
 .dark .min-h-screen.bg-gray-50 {
   background-color: #111827 !important;
 }
@@ -531,108 +410,11 @@ body {
   background-color: #374151 !important;
 }
 
-/* Post content specific dark mode styles */
-.dark .wp-content h1,
-.dark .wp-content h2,
-.dark .wp-content h3,
-.dark .wp-content h4,
-.dark .wp-content h5,
-.dark .wp-content h6 {
-  color: #f9fafb !important;
-}
-
-.dark .wp-content p {
-  color: #e5e7eb !important;
-}
-
-.dark .wp-content ul,
-.dark .wp-content ol {
-  color: #e5e7eb !important;
-}
-
-.dark .wp-content li {
-  color: #e5e7eb !important;
-}
-
-.dark .wp-content blockquote {
-  background-color: #374151 !important;
-  border-left-color: #991b1b !important;
-  color: #e5e7eb !important;
-}
-
-.dark .wp-content code {
-  background-color: #374151 !important;
-  color: #e5e7eb !important;
-}
-
-.dark .wp-content pre {
-  background-color: #374151 !important;
-  color: #e5e7eb !important;
-  border-color: #4b5563 !important;
-}
-
-.dark .wp-content table {
-  border-color: #4b5563 !important;
-}
-
-.dark .wp-content th,
-.dark .wp-content td {
-  border-color: #4b5563 !important;
-  color: #e5e7eb !important;
-}
-
-.dark .wp-content th {
-  background-color: #374151 !important;
-}
-
-.dark .wp-content a {
-  color: #fca5a5 !important;
-}
-
-.dark .wp-content a:hover {
-  color: #f87171 !important;
-}
-
-/* Ensure proper contrast for all text elements */
-.dark .wp-content strong,
-.dark .wp-content b {
-  color: #f9fafb !important;
-}
-
-.dark .wp-content em,
-.dark .wp-content i {
-  color: #e5e7eb !important;
-}
-
-/* WordPress specific classes */
-.dark .wp-block-quote {
-  border-left-color: #991b1b !important;
-  color: #e5e7eb !important;
-}
-
-.dark .wp-block-image figcaption {
-  color: #9ca3af !important;
-}
-
-.dark .wp-block-table {
+.dark .max-w-\[330px\] {
   background-color: #1f2937 !important;
-}
-
-.dark .wp-block-button .wp-block-button__link {
-  background-color: #991b1b !important;
-  color: white !important;
-}
-
-.dark .wp-block-button .wp-block-button__link:hover {
-  background-color: #7f1d1d !important;
-}
-
-/* Social share buttons dark mode */
-.dark .border-gray-200 {
   border-color: #374151 !important;
 }
 
-/* Back button dark mode */
 .dark .text-red-900 {
   color: #fca5a5 !important;
 }
@@ -641,16 +423,22 @@ body {
   color: #f87171 !important;
 }
 
-/* Meta info dark mode improvements */
-.dark .bg-gray-50 {
+.dark .border-red-900 {
+  border-color: #991b1b !important;
+}
+
+.dark .hover\:shadow-\[-7px_7px_0px_#8b0000bb\]:hover {
+  box-shadow: -7px 7px 0px #7f1d1d !important;
+}
+
+.dark .bg-gray-100 {
   background-color: #374151 !important;
 }
 
-.dark .text-gray-600 {
-  color: #d1d5db !important;
+.dark .hover\:bg-gray-200:hover {
+  background-color: #4b5563 !important;
 }
 
-/* Category badges dark mode */
 .dark .bg-red-900 {
   background-color: #991b1b !important;
 }
@@ -659,7 +447,31 @@ body {
   background-color: #991b1b !important;
 }
 
-/* Shadow improvements for dark mode */
-.dark .shadow-lg {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
+/* Prevent Dark Reader from causing hydration issues */
+[data-darkreader-inline-bgcolor] {
+  background-color: inherit !important;
+}
+
+[data-darkreader-inline-color] {
+  color: inherit !important;
+}
+
+[data-darkreader-inline-fill] {
+  fill: inherit !important;
+}
+
+[data-darkreader-inline-stroke] {
+  stroke: inherit !important;
+}
+
+[data-darkreader-inline-border] {
+  border-color: inherit !important;
+}
+
+.dark [data-darkreader-inline-color] {
+  color: #ededed !important;
+}
+
+.dark [data-darkreader-inline-bgcolor] {
+  background-color: #0a0a0a !important;
 }

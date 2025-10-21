@@ -5,11 +5,24 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import SocialShareButtons from './SocialShareButtons'
 
-// Detect if text is Urdu
-function isUrduTitle(text) {
+// Detect if text is Urdu or Arabic (RTL languages)
+function isRTLText(text) {
   if (!text) return false;
-  const urduRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/;
-  return urduRegex.test(text);
+  const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\u0590-\u05FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+  return rtlRegex.test(text);
+}
+
+// Detect specific language for better styling
+function detectLanguage(text) {
+  if (!text) return 'english';
+  
+  const urduRegex = /[\u0600-\u06FF]/;
+  const arabicRegex = /[\u0750-\u077F]/;
+  
+  if (urduRegex.test(text)) return 'urdu';
+  if (arabicRegex.test(text)) return 'arabic';
+  
+  return 'english';
 }
 
 const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug, index = 0 }) => {
@@ -32,8 +45,10 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug, index
     day: 'numeric'
   });
 
-  // Detect if title is Urdu
-  const isUrdu = isUrduTitle(title);
+  // Detect language and text direction
+  const language = detectLanguage(title);
+  const isRTL = isRTLText(title);
+  const excerptIsRTL = isRTLText(cleanExcerpt);
 
   const handleImageError = () => {
     setImageError(true);
@@ -114,9 +129,9 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug, index
         <Link href={`/posts/${slug}`}>
           <h3 
             className={`mb-3 text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 min-h-[56px] leading-tight group-hover:text-red-700 dark:group-hover:text-red-400 transition-colors duration-200 ${
-              isUrdu ? 'urdu-text text-right' : 'english-text text-left'
-            }`}
-            dir={isUrdu ? 'rtl' : 'ltr'}
+              isRTL ? 'text-right' : 'text-left'
+            } ${language}-text`}
+            dir={isRTL ? 'rtl' : 'ltr'}
           >
             {title}
           </h3>
@@ -124,9 +139,9 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug, index
         
         <p 
           className={`mb-4 text-sm text-gray-600 dark:text-gray-300 line-clamp-3 min-h-[60px] leading-relaxed ${
-            isUrdu ? 'urdu-text text-right' : 'english-text text-left'
+            excerptIsRTL ? 'text-right' : 'text-left'
           }`}
-          dir={isUrdu ? 'rtl' : 'ltr'}
+          dir={excerptIsRTL ? 'rtl' : 'ltr'}
         >
           {cleanExcerpt}
         </p>
