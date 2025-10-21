@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Al Asr - Hussaini Calendar",
-  description: "Al Asr Hussaini Calendar - Islamic Services",
+  title: "Al-Asr ( Islamic Service )",
+  description: "Al-Asr ( Islamic Service ) & Hussaini Calendar",
 };
 
 export default function RootLayout({ children }) {
