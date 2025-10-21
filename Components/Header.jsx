@@ -10,9 +10,9 @@ const Header = () => {
         <div className="relative w-[130px] sm:w-[160px] h-[60px]">
           <Image
             src="/logo.png"
-            alt="Al-Asr Hussaini Calendar"
-            width={160}
-            height={60}
+            alt="Al-Asr ( Islamic Service )"
+            width={120}
+            height={50}
             className="object-contain"
             priority
             sizes="(max-width: 640px) 130px, 160px"
@@ -25,10 +25,10 @@ const Header = () => {
       {/* Hero Section */}
       <div className="text-center my-12">
         <h1 className="text-3xl sm:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-          Al-Asr Hussaini Calendar
+          Al-Asr ( Islamic Service )
         </h1>
         <p className="mt-6 max-w-[740px] mx-auto text-base text-gray-600 leading-relaxed text-balance">
-          Islamic services, calendar events, and community programs. Stay updated with the latest from Al-Asr Islamic Center.
+          Al-Asr ( Islamic Service ), calendar events, and community programs. Stay updated with the latest from Al-Asr Islamic Center.
         </p>
         <div className="flex justify-center mt-8">
           <div className="bg-red-900 text-white px-6 py-3 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-200">
