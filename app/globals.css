@@ -110,3 +110,556 @@ body {
 .wp-content.urdu-text h4 { font-size: 1.5rem; }
 .wp-content.urdu-text h5 { font-size: 1.3rem; }
 .wp-content.urdu-text h6 { font-size: 1.2rem; }
+
+/* ========== DARK MODE STYLES ========== */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+.dark body {
+  background: #0a0a0a;
+  color: #ededed;
+}
+
+/* Dark mode for Urdu and English text */
+.dark .urdu-text,
+.dark .english-text {
+  color: #ededed;
+}
+
+/* Dark mode for WordPress content */
+.dark .wp-content {
+  color: #ededed;
+}
+
+.dark .wp-content h1,
+.dark .wp-content h2,
+.dark .wp-content h3,
+.dark .wp-content h4,
+.dark .wp-content h5,
+.dark .wp-content h6 {
+  color: #ffffff;
+}
+
+/* Dark mode for blog cards */
+.dark .max-w-\\[330px\\] {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+.dark .bg-white {
+  background-color: #1f2937 !important;
+}
+
+.dark .text-gray-900 {
+  color: #f3f4f6 !important;
+}
+
+.dark .text-gray-600 {
+  color: #d1d5db !important;
+}
+
+.dark .text-gray-500 {
+  color: #9ca3af !important;
+}
+
+.dark .border-gray-200 {
+  border-color: #374151 !important;
+}
+
+.dark .bg-gray-100 {
+  background-color: #374151 !important;
+}
+
+.dark .bg-gray-200 {
+  background-color: #4b5563 !important;
+}
+
+.dark .text-red-900 {
+  color: #fca5a5 !important;
+}
+
+.dark .hover\\:text-red-700:hover {
+  color: #f87171 !important;
+}
+
+.dark .border-red-900 {
+  border-color: #991b1b !important;
+}
+
+.dark .hover\\:shadow-\\[-7px_7px_0px_#8b0000bb\\]:hover {
+  box-shadow: -7px 7px 0px #7f1d1d !important;
+}
+
+/* Dark mode for category buttons */
+.dark .category-button {
+  background: #374151 !important;
+  border-color: #4b5563 !important;
+  color: #d1d5db !important;
+}
+
+.dark .category-button:hover {
+  background: #4b5563 !important;
+  color: #ffffff !important;
+}
+
+.dark .category-button.active {
+  background: #991b1b !important;
+  color: white !important;
+  border-color: #991b1b !important;
+  box-shadow: -4px 4px 0px #7f1d1d !important;
+}
+
+/* Dark mode for dropdown menus */
+.dark .subcategories-menu {
+  background: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+.dark .subcategory-item {
+  color: #d1d5db !important;
+  background: #1f2937 !important;
+}
+
+.dark .subcategory-item:hover {
+  background-color: #374151 !important;
+  color: #ffffff !important;
+}
+
+.dark .subcategory-item.active {
+  background-color: #7f1d1d !important;
+  color: #fef2f2 !important;
+}
+
+/* Dark mode for active filter badge */
+.dark .active-filter-badge {
+  background: #1e3a8a !important;
+  border-color: #3730a3 !important;
+  color: #dbeafe !important;
+}
+
+.dark .clear-filter-button {
+  color: #60a5fa !important;
+}
+
+.dark .clear-filter-button:hover {
+  color: #3b82f6 !important;
+}
+
+/* Dark mode for error and warning states */
+.dark .error-state {
+  background: #450a0a !important;
+  border-color: #7f1d1d !important;
+  color: #fecaca !important;
+}
+
+.dark .warning-state {
+  background: #451a03 !important;
+  border-color: #9a3412 !important;
+  color: #fed7aa !important;
+}
+
+/* Dark mode for social share buttons */
+.dark .bg-gray-100 {
+  background-color: #374151 !important;
+}
+
+.dark .hover\\:bg-gray-200:hover {
+  background-color: #4b5563 !important;
+}
+
+.dark .text-gray-600 {
+  color: #d1d5db !important;
+}
+
+/* Prevent Dark Reader from causing hydration issues */
+[data-darkreader-inline-bgcolor] {
+  background-color: inherit !important;
+}
+
+[data-darkreader-inline-color] {
+  color: inherit !important;
+}
+
+[data-darkreader-inline-fill] {
+  fill: inherit !important;
+}
+
+[data-darkreader-inline-stroke] {
+  stroke: inherit !important;
+}
+
+[data-darkreader-inline-border] {
+  border-color: inherit !important;
+}
+
+/* Force specific styles for dark mode compatibility */
+.dark [data-darkreader-inline-color] {
+  color: #ededed !important;
+}
+
+.dark [data-darkreader-inline-bgcolor] {
+  background-color: #0a0a0a !important;
+}
+
+
+
+
+
+
+
+/* ========== CATEGORIES DROPDOWN STYLING ========== */
+.category-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.subcategories-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  min-width: 200px;
+  z-index: 1000;
+  padding: 0.5rem 0;
+  pointer-events: auto;
+}
+
+/* Nested subcategories styling */
+.category-dropdown.nested {
+  width: 100%;
+  position: relative;
+}
+
+.category-dropdown.nested .subcategories-menu {
+  left: 100% !important;
+  top: 0 !important;
+  margin-top: 0 !important;
+  margin-left: 0.25rem !important;
+  min-width: 180px;
+}
+
+.subcategory-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #374151;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+  position: relative;
+}
+
+.subcategory-item:hover {
+  background-color: #f3f4f6;
+}
+
+.subcategory-item.active {
+  background-color: #fef2f2;
+  color: #991b1b;
+}
+
+.category-button {
+  position: relative;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.125rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.category-button:hover {
+  background: #f3f4f6;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.category-button.active {
+  background: #991b1b;
+  color: white;
+  border-color: #991b1b;
+  box-shadow: -4px 4px 0px #8b0000;
+  transform: translateY(-1px);
+}
+
+.category-button.has-children {
+  padding-right: 2rem;
+}
+
+.dropdown-arrow {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Dark mode for categories */
+.dark .subcategories-menu {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.dark .subcategory-item {
+  color: #d1d5db;
+  background: #1f2937;
+}
+
+.dark .subcategory-item:hover {
+  background-color: #374151;
+  color: #ffffff;
+}
+
+.dark .subcategory-item.active {
+  background-color: #7f1d1d;
+  color: #fef2f2;
+}
+
+.dark .category-button {
+  background: #374151;
+  border-color: #4b5563;
+  color: #d1d5db;
+}
+
+.dark .category-button:hover {
+  background: #4b5563;
+  color: #ffffff;
+}
+
+.dark .category-button.active {
+  background: #991b1b;
+  color: white;
+  border-color: #991b1b;
+  box-shadow: -4px 4px 0px #7f1d1d;
+}
+
+/* Active filter badge */
+.active-filter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #dbeafe;
+  border: 1px solid #bfdbfe;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #1e40af;
+}
+
+.clear-filter-button {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+.clear-filter-button:hover {
+  color: #1d4ed8;
+}
+
+.dark .active-filter-badge {
+  background: #1e3a8a;
+  border-color: #3730a3;
+  color: #dbeafe;
+}
+
+.dark .clear-filter-button {
+  color: #60a5fa;
+}
+
+.dark .clear-filter-button:hover {
+  color: #3b82f6;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ========== POST PAGE DARK MODE STYLES ========== */
+.dark .min-h-screen.bg-gray-50 {
+  background-color: #111827 !important;
+}
+
+.dark .bg-white {
+  background-color: #1f2937 !important;
+}
+
+.dark .text-gray-900 {
+  color: #f9fafb !important;
+}
+
+.dark .text-gray-700 {
+  color: #e5e7eb !important;
+}
+
+.dark .text-gray-600 {
+  color: #d1d5db !important;
+}
+
+.dark .border-gray-200 {
+  border-color: #374151 !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: #374151 !important;
+}
+
+/* Post content specific dark mode styles */
+.dark .wp-content h1,
+.dark .wp-content h2,
+.dark .wp-content h3,
+.dark .wp-content h4,
+.dark .wp-content h5,
+.dark .wp-content h6 {
+  color: #f9fafb !important;
+}
+
+.dark .wp-content p {
+  color: #e5e7eb !important;
+}
+
+.dark .wp-content ul,
+.dark .wp-content ol {
+  color: #e5e7eb !important;
+}
+
+.dark .wp-content li {
+  color: #e5e7eb !important;
+}
+
+.dark .wp-content blockquote {
+  background-color: #374151 !important;
+  border-left-color: #991b1b !important;
+  color: #e5e7eb !important;
+}
+
+.dark .wp-content code {
+  background-color: #374151 !important;
+  color: #e5e7eb !important;
+}
+
+.dark .wp-content pre {
+  background-color: #374151 !important;
+  color: #e5e7eb !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .wp-content table {
+  border-color: #4b5563 !important;
+}
+
+.dark .wp-content th,
+.dark .wp-content td {
+  border-color: #4b5563 !important;
+  color: #e5e7eb !important;
+}
+
+.dark .wp-content th {
+  background-color: #374151 !important;
+}
+
+.dark .wp-content a {
+  color: #fca5a5 !important;
+}
+
+.dark .wp-content a:hover {
+  color: #f87171 !important;
+}
+
+/* Ensure proper contrast for all text elements */
+.dark .wp-content strong,
+.dark .wp-content b {
+  color: #f9fafb !important;
+}
+
+.dark .wp-content em,
+.dark .wp-content i {
+  color: #e5e7eb !important;
+}
+
+/* WordPress specific classes */
+.dark .wp-block-quote {
+  border-left-color: #991b1b !important;
+  color: #e5e7eb !important;
+}
+
+.dark .wp-block-image figcaption {
+  color: #9ca3af !important;
+}
+
+.dark .wp-block-table {
+  background-color: #1f2937 !important;
+}
+
+.dark .wp-block-button .wp-block-button__link {
+  background-color: #991b1b !important;
+  color: white !important;
+}
+
+.dark .wp-block-button .wp-block-button__link:hover {
+  background-color: #7f1d1d !important;
+}
+
+/* Social share buttons dark mode */
+.dark .border-gray-200 {
+  border-color: #374151 !important;
+}
+
+/* Back button dark mode */
+.dark .text-red-900 {
+  color: #fca5a5 !important;
+}
+
+.dark .hover\:text-red-700:hover {
+  color: #f87171 !important;
+}
+
+/* Meta info dark mode improvements */
+.dark .bg-gray-50 {
+  background-color: #374151 !important;
+}
+
+.dark .text-gray-600 {
+  color: #d1d5db !important;
+}
+
+/* Category badges dark mode */
+.dark .bg-red-900 {
+  background-color: #991b1b !important;
+}
+
+.dark .bg-red-800 {
+  background-color: #991b1b !important;
+}
+
+/* Shadow improvements for dark mode */
+.dark .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
+}

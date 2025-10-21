@@ -1,9 +1,8 @@
 // app/posts/[slug]/page.js
 import { GraphQLClient } from 'graphql-request';
-import Image from 'next/image';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
+import PostClient from './PostClient';
 
 const client = new GraphQLClient('https://admin-al-asr.centers.pk/graphql');
 
@@ -36,77 +35,37 @@ async function getPost(slug) {
   }
 }
 
-// Detect if content is Urdu
-function isUrduContent(text) {
-  if (!text) return false;
-  
-  const cleanText = text.replace(/<[^>]*>/g, '');
-  
-  // Urdu/Arabic character ranges
-  const urduRanges = [
-    /[\u0600-\u06FF]/, // Arabic
-    /[\u0750-\u077F]/, // Arabic Supplement
-    /[\u08A0-\u08FF]/, // Arabic Extended-A
-    /[\uFB50-\uFDFF]/, // Arabic Presentation Forms-A
-    /[\uFE70-\uFEFF]/, // Arabic Presentation Forms-B
-  ];
-  
-  // Count Urdu characters
-  let urduCharCount = 0;
-  let totalCharCount = 0;
-  
-  for (let char of cleanText) {
-    if (urduRanges.some(regex => regex.test(char))) {
-      urduCharCount++;
-    }
-    if (char.trim() !== '') {
-      totalCharCount++;
-    }
-  }
-  
-  // If more than 30% characters are Urdu, consider it Urdu content
-  return totalCharCount > 0 && (urduCharCount / totalCharCount) > 0.3;
-}
-
-// PostPageSkeleton component
+// Simple PostPageSkeleton
 const PostPageSkeleton = () => {
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden animate-pulse">
-        {/* Featured Image Skeleton */}
-        <div className="h-96 w-full bg-gray-300"></div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Header Skeleton */}
+      <div className="py-5 px-5 md:px-12 lg:px-28 bg-gradient-to-b from-white to-red-50 dark:from-gray-800 dark:to-gray-700">
+        <div className="flex justify-between items-center">
+          <div className="w-[130px] sm:w-[160px] h-[60px] bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+          <div className="w-0"></div>
+        </div>
+        
+        <div className="text-center my-12">
+          <div className="h-12 bg-gray-300 dark:bg-gray-600 rounded animate-pulse mb-4 mx-auto max-w-md"></div>
+          <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded animate-pulse mt-6 mx-auto max-w-2xl"></div>
+          <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded animate-pulse mt-4 mx-auto max-w-xl w-3/4"></div>
+          <div className="h-12 bg-gray-300 dark:bg-gray-600 rounded animate-pulse mt-8 mx-auto max-w-sm"></div>
+        </div>
+      </div>
 
-        {/* Content Skeleton */}
-        <div className="p-8">
-          {/* Categories Skeleton */}
-          <div className="mb-4">
-            <div className="w-24 h-6 bg-gray-300 rounded-full"></div>
-          </div>
-
-          {/* Title Skeleton */}
-          <div className="h-8 bg-gray-300 rounded mb-4 w-3/4"></div>
-          <div className="h-8 bg-gray-300 rounded mb-6 w-1/2"></div>
-
-          {/* Meta Info Skeleton */}
-          <div className="flex items-center gap-4 mb-6 border-b border-gray-200 pb-4">
-            <div className="w-32 h-4 bg-gray-300 rounded"></div>
-            <div className="w-24 h-4 bg-gray-300 rounded"></div>
-          </div>
-
-          {/* Content Skeleton */}
-          <div className="space-y-4">
-            <div className="h-4 bg-gray-300 rounded w-full"></div>
-            <div className="h-4 bg-gray-300 rounded w-full"></div>
-            <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-300 rounded w-full"></div>
-            <div className="h-4 bg-gray-300 rounded w-5/6"></div>
-            <div className="h-4 bg-gray-300 rounded w-full"></div>
-            <div className="h-4 bg-gray-300 rounded w-2/3"></div>
-          </div>
-
-          {/* Back Button Skeleton */}
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <div className="w-32 h-6 bg-gray-300 rounded float-right"></div>
+      {/* Post Content Skeleton */}
+      <div className="py-8">
+        <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden animate-pulse">
+          <div className="h-96 w-full bg-gray-300 dark:bg-gray-700"></div>
+          <div className="p-6 md:p-8">
+            <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded mb-4 w-3/4"></div>
+            <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded mb-6 w-1/2"></div>
+            <div className="space-y-4">
+              <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-full"></div>
+              <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-full"></div>
+              <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-3/4"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -119,93 +78,33 @@ async function PostContent({ slug }) {
   const post = await getPost(slug);
   if (!post) notFound();
 
-  // Detect language
-  const isUrdu = isUrduContent(post.content) || isUrduContent(post.title);
-  
-  const formattedDate = new Date(post.date).toLocaleDateString('en-US', {
-    year: 'numeric', month: 'long', day: 'numeric'
-  });
+  // Detect if title is Urdu
+  function isUrduTitle(text) {
+    if (!text) return false;
+    const urduRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/;
+    return urduRegex.test(text);
+  }
 
-  return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <article 
-        className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden"
-        dir={isUrdu ? "rtl" : "ltr"}
-      >
-        {/* Featured Image */}
-        {post.featuredImage?.node?.sourceUrl && (
-          <div className="relative h-96 w-full">
-            <Image
-              src={post.featuredImage.node.sourceUrl}
-              alt={post.featuredImage.node.altText || post.title}
-              fill
-              className="object-cover"
-              priority
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-            />
-          </div>
-        )}
+  const isUrdu = isUrduTitle(post.title);
 
-        {/* Content */}
-        <div className="p-8">
-          {/* Categories */}
-          <div className="mb-4 text-left">
-            {post.categories.nodes.map((category) => (
-              <span key={category.slug} className="inline-block bg-red-900 text-white text-sm px-3 py-1 rounded-full mr-2">
-                {category.name}
-              </span>
-            ))}
-          </div>
-
-          {/* Title */}
-          <h1 className={`text-3xl md:text-4xl font-bold text-gray-900 mb-4 ${isUrdu ? 'text-right urdu-text' : 'text-left english-text'}`}>
-            {post.title}
-          </h1>
-
-          {/* Meta Info */}
-          <div className="flex items-center text-gray-600 mb-6 border-b border-gray-200 pb-4">
-            <span className="mr-4">📅 {formattedDate}</span>
-            <span>👤 By {post.author?.node?.name || 'Admin'}</span>
-          </div>
-
-          {/* Content with proper font */}
-          <div 
-            className={`wp-content ${isUrdu ? 'urdu-text' : 'english-text'} max-w-none text-gray-700`}
-            style={{ 
-              direction: isUrdu ? 'rtl' : 'ltr',
-              textAlign: isUrdu ? 'right' : 'left',
-            }}
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
-
-          {/* Back Button */}
-          <div className="mt-8 pt-6 border-t border-gray-200 text-right">
-            <Link
-              href="/"
-              className="inline-flex items-center text-red-900 hover:text-red-700 font-semibold"
-            >
-              Back to All Posts
-              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-      </article>
-    </div>
-  );
+  return <PostClient post={post} slug={slug} isUrdu={isUrdu} />;
 }
 
 export default async function PostPage({ params }) {
+  // ✅ Correct way to get params in Next.js 15
+  const slug = (await params).slug;
+  
   return (
     <Suspense fallback={<PostPageSkeleton />}>
-      <PostContent slug={params.slug} />
+      <PostContent slug={slug} />
     </Suspense>
   )
 }
 
 export async function generateMetadata({ params }) {
-  const post = await getPost(params.slug);
+  // ✅ Correct way to get params in Next.js 15
+  const slug = (await params).slug;
+  const post = await getPost(slug);
   
   if (!post) {
     return {
@@ -216,5 +115,13 @@ export async function generateMetadata({ params }) {
   return {
     title: `${post.title} | Al-Asr Hussaini Calendar`,
     description: post.content?.replace(/<[^>]*>/g, '').substring(0, 160) + '...',
+    openGraph: {
+      title: post.title,
+      description: post.content?.replace(/<[^>]*>/g, '').substring(0, 160) + '...',
+      type: 'article',
+      publishedTime: post.date,
+      authors: [post.author?.node?.name || 'Al-Asr'],
+      images: post.featuredImage?.node?.sourceUrl ? [post.featuredImage.node.sourceUrl] : [],
+    },
   };
 }

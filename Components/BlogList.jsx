@@ -5,23 +5,20 @@ import BlogItem from './BlogItem'
 import { BlogItemSkeleton } from './SkeletonLoader'
 import { getPosts, getAllCategories } from '@/lib/wordpress'
 
-const BlogList = () => {
+const BlogList = ({ 
+  showTitle = true,
+  currentPostSlug = null // Exclude current post from related posts
+}) => {
   const [posts, setPosts] = useState([])
   const [filteredPosts, setFilteredPosts] = useState([])
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState({ 
+    categoryTree: [], 
+    allCategories: [] 
+  })
   const [activeCategory, setActiveCategory] = useState('all')
+  const [openDropdowns, setOpenDropdowns] = useState(new Set())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-
-  // Islamic-themed categories fallback
-  const islamicCategories = [
-    { slug: 'all', name: 'All Posts' },
-    { slug: 'islamic-calendar', name: 'Islamic Calendar' },
-    { slug: 'events', name: 'Events' },
-    { slug: 'services', name: 'Services' },
-    { slug: 'news', name: 'News' },
-    { slug: 'uncategorized', name: 'General' }
-  ]
 
   useEffect(() => {
     fetchInitialData()
@@ -29,15 +26,23 @@ const BlogList = () => {
 
   useEffect(() => {
     // Filter posts when activeCategory changes
+    let filtered = posts;
+    
     if (activeCategory === 'all') {
-      setFilteredPosts(posts)
+      filtered = posts;
     } else {
-      const filtered = posts.filter(post => 
+      filtered = posts.filter(post => 
         post.categories?.nodes?.some(cat => cat.slug === activeCategory)
       )
-      setFilteredPosts(filtered)
     }
-  }, [activeCategory, posts])
+    
+    // Exclude current post if provided
+    if (currentPostSlug) {
+      filtered = filtered.filter(post => post.slug !== currentPostSlug)
+    }
+    
+    setFilteredPosts(filtered)
+  }, [activeCategory, posts, currentPostSlug])
 
   const fetchInitialData = async () => {
     try {
@@ -50,48 +55,164 @@ const BlogList = () => {
       ])
       
       setPosts(postsData)
-      setFilteredPosts(postsData)
       
-      // Use WordPress categories if available, otherwise use fallback
-      if (categoriesData && categoriesData.length > 0) {
-        const formattedCategories = categoriesData.map(cat => ({
-          slug: cat.slug,
-          name: cat.name
-        }))
-        setCategories([{ slug: 'all', name: 'All Posts' }, ...formattedCategories])
+      // Initial filtering
+      let initialFiltered = postsData;
+      if (currentPostSlug) {
+        initialFiltered = postsData.filter(post => post.slug !== currentPostSlug)
+      }
+      setFilteredPosts(initialFiltered)
+      
+      if (categoriesData && categoriesData.categoryTree.length > 0) {
+        // Add "All Posts" category ONLY here
+        const allPostsCategory = {
+          slug: 'all',
+          name: 'All Posts',
+          children: []
+        }
+        
+        const finalCategoryTree = [allPostsCategory, ...categoriesData.categoryTree];
+        console.log('🎯 Final Category Tree for UI:', finalCategoryTree);
+        
+        setCategories({
+          categoryTree: finalCategoryTree,
+          allCategories: categoriesData.allCategories
+        })
       } else {
-        setCategories(islamicCategories)
+        // Fallback categories
+        const fallbackTree = [
+          { slug: 'all', name: 'All Posts', children: [] },
+          { slug: 'islamic-calendar', name: 'Islamic Calendar', children: [] },
+          { slug: 'events', name: 'Events', children: [] }
+        ]
+        
+        setCategories({
+          categoryTree: fallbackTree,
+          allCategories: fallbackTree
+        })
       }
     } catch (err) {
       console.error('Error:', err)
       setError('Failed to load content')
-      setCategories(islamicCategories)
     } finally {
       setLoading(false)
     }
   }
 
   const handleCategoryChange = (categorySlug) => {
+    console.log('🎯 Category clicked:', categorySlug);
     setActiveCategory(categorySlug)
+    setOpenDropdowns(new Set()) // Close all dropdowns when category changes
+  }
+
+  const toggleDropdown = (categorySlug, level = 0) => {
+    const key = `${categorySlug}-${level}`
+    const newOpenDropdowns = new Set(openDropdowns)
+    
+    if (newOpenDropdowns.has(key)) {
+      newOpenDropdowns.delete(key)
+    } else {
+      newOpenDropdowns.add(key)
+    }
+    
+    setOpenDropdowns(newOpenDropdowns)
+  }
+
+  // Recursive function to find category name by slug
+  const findCategoryName = (slug, categoryList = categories.categoryTree) => {
+    for (const category of categoryList) {
+      if (category.slug === slug) return category.name
+      if (category.children && category.children.length > 0) {
+        const found = findCategoryName(slug, category.children)
+        if (found) return found
+      }
+    }
+    return 'Selected Category'
+  }
+
+  // Recursive component to render nested categories with CLICK-based dropdowns
+  const CategoryDropdown = ({ category, level = 0 }) => {
+    const hasChildren = category.children && category.children.length > 0
+    const isActive = activeCategory === category.slug
+    const dropdownKey = `${category.slug}-${level}`
+    const isOpen = openDropdowns.has(dropdownKey)
+
+    const handleCategoryClick = () => {
+      if (hasChildren) {
+        // Toggle dropdown for categories with children
+        toggleDropdown(category.slug, level)
+      } else {
+        // Select category for categories without children
+        handleCategoryChange(category.slug)
+      }
+    }
+
+    const handleSubCategoryClick = (subCategorySlug) => {
+      handleCategoryChange(subCategorySlug)
+      setOpenDropdowns(new Set()) // Close all dropdowns
+    }
+
+    return (
+      <div 
+        key={dropdownKey}
+        className={`category-dropdown ${level > 0 ? 'nested' : ''}`}
+      >
+        <button
+          className={`category-button ${isActive ? 'active' : ''} ${hasChildren ? 'has-children' : ''} level-${level}`}
+          onClick={handleCategoryClick}
+          type="button"
+        >
+          <span className="category-name">{category.name}</span>
+          
+          {/* Dropdown arrow for categories with children */}
+          {hasChildren && (
+            <svg 
+              className={`dropdown-arrow w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          )}
+        </button>
+
+        {/* Children Categories Dropdown - CLICK based */}
+        {hasChildren && isOpen && (
+          <div 
+            className={`subcategories-menu level-${level + 1}`}
+          >
+            {category.children.map((childCategory) => (
+              <button
+                key={`${childCategory.slug}-${level + 1}`}
+                className={`subcategory-item ${activeCategory === childCategory.slug ? 'active' : ''}`}
+                onClick={() => handleSubCategoryClick(childCategory.slug)}
+                type="button"
+              >
+                {childCategory.name}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    )
   }
 
   if (error) {
     return (
       <div className="container mx-auto px-4">
-        <div className="text-center py-16">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-8 max-w-md mx-auto">
-            <svg className="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <h3 className="text-xl font-semibold text-red-800 mb-2">Connection Error</h3>
-            <p className="text-red-700 mb-4">{error}</p>
-            <button 
-              onClick={fetchInitialData}
-              className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
-            >
-              Try Again
-            </button>
-          </div>
+        <div className="text-center py-16 error-state">
+          <svg className="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h3 className="text-xl font-semibold text-red-800 dark:text-red-200 mb-2">Connection Error</h3>
+          <p className="text-red-700 dark:text-red-300 mb-4">{error}</p>
+          <button 
+            onClick={fetchInitialData}
+            className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+          >
+            Try Again
+          </button>
         </div>
       </div>
     )
@@ -99,22 +220,53 @@ const BlogList = () => {
 
   return (
     <div className="container mx-auto px-4">
-      {/* Category Filters */}
+      {/* Show title only if prop is true */}
+      {showTitle && (
+        <div className="text-center mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+            Latest Posts
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
+            Discover more Islamic content and events
+          </p>
+        </div>
+      )}
+
+      {/* Category Filters with CLICK-based Dropdowns */}
       <div className='flex justify-center gap-3 my-10 flex-wrap'>
-        {categories.map((category) => (
-          <button
-            key={category.slug}
-            className={`py-2 px-5 rounded-sm transition-all font-medium ${
-              activeCategory === category.slug
-                ? 'bg-red-900 text-white shadow-[-4px_4px_0px_#8b0000] transform -translate-y-1'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300 hover:shadow-md'
-            }`}
-            onClick={() => handleCategoryChange(category.slug)}
-          >
-            {category.name}
-          </button>
-        ))}
+        {categories.categoryTree.length > 0 ? (
+          categories.categoryTree.map((category) => (
+            <CategoryDropdown 
+              key={`category-${category.slug}`} 
+              category={category} 
+            />
+          ))
+        ) : (
+          !loading && (
+            <div className="text-center text-gray-500 dark:text-gray-400">
+              No categories available
+            </div>
+          )
+        )}
       </div>
+
+      {/* Active Category Info */}
+      {activeCategory !== 'all' && (
+        <div className="text-center mb-8">
+          <div className="active-filter-badge">
+            <span>
+              Showing posts from: <strong>{findCategoryName(activeCategory)}</strong>
+            </span>
+            <button
+              onClick={() => handleCategoryChange('all')}
+              className="clear-filter-button"
+              type="button"
+            >
+              ✕ Clear filter
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Posts Grid */}
       {loading ? (
@@ -139,19 +291,26 @@ const BlogList = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-16">
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-8 max-w-md mx-auto">
-            <svg className="w-16 h-16 text-yellow-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z" />
-            </svg>
-            <h3 className="text-xl font-semibold text-yellow-800 mb-2">No Posts Found</h3>
-            <p className="text-yellow-700">
-              {activeCategory === 'all' 
-                ? 'No content available yet. Please check back later.'
-                : `No posts found in "${categories.find(cat => cat.slug === activeCategory)?.name}" category.`
-              }
-            </p>
-          </div>
+        <div className="text-center py-16 warning-state">
+          <svg className="w-16 h-16 text-yellow-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
+          <h3 className="text-xl font-semibold text-yellow-800 dark:text-yellow-200 mb-2">No Posts Found</h3>
+          <p className="text-yellow-700 dark:text-yellow-300">
+            {activeCategory === 'all' 
+              ? 'No other content available yet. Please check back later.'
+              : `No posts found in "${findCategoryName(activeCategory)}" category.`
+            }
+          </p>
+          {activeCategory !== 'all' && (
+            <button
+              onClick={() => handleCategoryChange('all')}
+              className="mt-4 bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors"
+              type="button"
+            >
+              Show All Posts
+            </button>
+          )}
         </div>
       )}
     </div>
