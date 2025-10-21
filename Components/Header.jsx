@@ -11,8 +11,8 @@ const Header = () => {
           <Image
             src="/logo.png"
             alt="Al-Asr ( Islamic Service )"
-            width={120}
-            height={50}
+            width={100}
+            height={40}
             className="object-contain"
             priority
             sizes="(max-width: 640px) 130px, 160px"
