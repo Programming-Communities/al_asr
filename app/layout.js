@@ -50,8 +50,28 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
+        {/* Critical CSS Inline */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            /* Critical CSS for above-the-fold content */
+            body { margin: 0; font-family: system-ui, -apple-system, sans-serif; }
+            .bg-white { background: white; }
+            .text-gray-900 { color: #111827; }
+            .min-h-screen { min-height: 100vh; }
+          `
+        }} />
+        
         {/* Preload critical resources */}
-        <link rel="preconnect" href="https://admin-al-asr.centers.pk" />
+        <link rel="preconnect" href="https://admin-al-asr.centers.pk" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://admin-al-asr.centers.pk" />
+        
+        {/* Preload critical images */}
+        <link 
+          rel="preload" 
+          href="https://admin-al-asr.centers.pk/wp-content/uploads/2025/10/Hussaini-Calendar-22-October-2026.jpg" 
+          as="image"
+          fetchPriority="high"
+        />
         
         {/* Additional explicit OG image tags */}
         <meta property="og:image" content={`${baseUrl}/og-image.png`} />

@@ -1,4 +1,4 @@
-// Components/BlogItem.jsx - Updated with minimal social share
+// Components/BlogItem.jsx - LCP Optimized
 import Link from 'next/link'
 import React, { useState, useEffect } from 'react'
 import SocialShareButtons from './SocialShareButtons'
@@ -58,6 +58,9 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug, index
   // Check if we should show image
   const shouldShowImage = imageSrc && !imageError;
 
+  // LCP Optimization: First 3 images should be high priority
+  const isLCPCandidate = index < 3;
+
   return (
     <div className='max-w-[330px] bg-white dark:bg-gray-800 border border-red-900 dark:border-red-800 hover:shadow-[-7px_7px_0px_#8b0000bb] dark:hover:shadow-[-7px_7px_0px_#7f1d1d] transition-all duration-300 cursor-pointer mx-auto group'>
       <Link href={`/posts/${slug}`}>
@@ -70,8 +73,11 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug, index
                 className="w-full h-full border-b border-red-900 dark:border-red-800 object-cover group-hover:scale-105 transition-transform duration-300"
                 onError={handleImageError}
                 onLoad={handleImageLoad}
-                loading={index < 3 ? "eager" : "lazy"}
+                loading={isLCPCandidate ? "eager" : "lazy"}
                 decoding="async"
+                fetchPriority={isLCPCandidate ? "high" : "auto"}
+                width="328"
+                height="272"
               />
               {imageLoading && (
                 <div className="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse z-10 flex items-center justify-center">
@@ -94,7 +100,7 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug, index
         </div>
       </Link>
       
-      {/* Category and Social Share Row - UPDATED */}
+      {/* Category and Social Share Row */}
       <div className='px-5 pt-5 flex justify-between items-center'>
         <span className='inline-block bg-red-900 dark:bg-red-800 text-white text-xs px-3 py-1 rounded-full font-medium'>
           {category}
@@ -114,7 +120,7 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug, index
             </svg>
           </button>
           
-          {/* Minimal Share Dropdown - UPDATED */}
+          {/* Minimal Share Dropdown */}
           {showSocialMenu && (
             <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-3 z-10">
               <SocialShareButtons title={title} slug={slug} excerpt={cleanExcerpt} />

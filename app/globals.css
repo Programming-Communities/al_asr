@@ -11,15 +11,28 @@
   --foreground: #ededed;
 }
 
+/* Critical CSS - Load First */
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: system-ui, -apple-system, sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
+  padding: 0;
+}
+
+/* LCP Optimization */
+.lcp-image {
+  content-visibility: auto;
+  fetchpriority: high;
+}
+
+/* Responsive Images */
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 /* ========== RTL/LTR TEXT STYLING ========== */
-/* Urdu/Arabic RTL Support */
 .urdu-arabic-content {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   direction: rtl;
@@ -32,14 +45,12 @@ body {
   text-align: right;
 }
 
-/* English LTR Support */
 .english-content {
   direction: ltr;
   text-align: left;
   line-height: 1.7;
 }
 
-/* Force RTL layout */
 [dir="rtl"] {
   text-align: right;
 }
@@ -153,7 +164,6 @@ body {
   color: #ededed;
 }
 
-/* Dark mode text colors */
 .dark .urdu-arabic-content,
 .dark .english-content,
 .dark .wp-content {
@@ -257,7 +267,6 @@ body {
   transition: transform 0.2s ease;
 }
 
-/* Dark mode for categories */
 .dark .subcategories-menu {
   background: #1f2937;
   border-color: #374151;
@@ -292,7 +301,6 @@ body {
   border-color: #991b1b;
 }
 
-/* Active filter badge */
 .active-filter-badge {
   display: inline-flex;
   align-items: center;
@@ -385,14 +393,16 @@ body {
 }
 
 /* ========== PERFORMANCE OPTIMIZATIONS ========== */
-/* Reduce layout shifts */
-img {
+/* Critical image optimization */
+.critical-img {
   content-visibility: auto;
+  fetchpriority: high;
 }
 
-/* Smooth transitions */
-* {
-  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+/* Reduce layout shifts */
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Optimize animations */
@@ -409,28 +419,10 @@ img {
   }
 }
 
-/* Focus styles for better accessibility */
 button:focus-visible,
 a:focus-visible {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
-}
-
-/* ========== PRINT STYLES ========== */
-@media print {
-  .no-print {
-    display: none !important;
-  }
-  
-  body {
-    background: white !important;
-    color: black !important;
-  }
-  
-  .urdu-arabic-content,
-  .english-content {
-    color: black !important;
-  }
 }
 
 /* ========== RESPONSIVE IMPROVEMENTS ========== */
