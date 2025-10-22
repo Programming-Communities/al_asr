@@ -65,7 +65,7 @@ const PostPageSkeleton = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header Skeleton */}
-      <div className="py-5 px-5 md:px-12 lg:px-28 bg-gradient-to-b from-white to-red-50 dark:from-gray-800 dark:to-gray-700">
+      <div className="py-5 px-5 md:px-12 lg:px-28 bg-linear-to-b from-white to-red-50 dark:from-gray-800 dark:to-gray-700">
         <div className="flex justify-between items-center">
           <div className="w-[130px] sm:w-[160px] h-[60px] bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
           <div className="w-0"></div>
@@ -128,13 +128,44 @@ export default async function PostPage({ params }) {
   )
 }
 
+// Updated generateMetadata function with proper PNG OG image
 export async function generateMetadata({ params }) {
   const slug = (await params).slug;
   const post = await getPost(slug);
   
+  const baseUrl = 'https://al-asr.centers.pk';
+  
   if (!post) {
     return {
       title: 'Post Not Found | Al-Asr ( Islamic Service )',
+      description: 'The requested post was not found.',
+      metadataBase: new URL(baseUrl),
+      openGraph: {
+        title: 'Post Not Found | Al-Asr ( Islamic Service )',
+        description: 'The requested post was not found.',
+        url: `${baseUrl}/posts/${slug}`,
+        siteName: 'Al-Asr ( Islamic Service )',
+        images: [
+          {
+            url: `${baseUrl}/og-image.png`,
+            width: 1200,
+            height: 630,
+            alt: 'Al-Asr Islamic Service',
+            type: 'image/png',
+          },
+        ],
+        locale: 'ur_PK',
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: 'Post Not Found | Al-Asr ( Islamic Service )',
+        description: 'The requested post was not found.',
+        images: [`${baseUrl}/og-image.png`],
+      },
+      alternates: {
+        canonical: `${baseUrl}/posts/${slug}`,
+      },
     };
   }
 
@@ -143,15 +174,22 @@ export async function generateMetadata({ params }) {
                       post.content?.replace(/<[^>]*>/g, '').substring(0, 160) + '...' ||
                       'Islamic services and community programs from Al-Asr ( Islamic Service )';
 
-  // Get featured image URL or default image
-  const imageUrl = post.featuredImage?.node?.sourceUrl || 
-                  'https://al-asr.centers.pk/og-image.jpg';
+  // Use post image or fallback to default OG image (PNG)
+  const imageUrl = post.featuredImage?.node?.sourceUrl || `${baseUrl}/og-image.png`;
+  const fullUrl = `${baseUrl}/posts/${slug}`;
 
-  const fullUrl = `https://al-asr.centers.pk/posts/${slug}`;
+  // Ensure image URL is absolute
+  const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`;
 
-  return {
+  // Determine image type based on URL
+  const imageType = absoluteImageUrl.includes('.png') ? 'image/png' : 
+                   absoluteImageUrl.includes('.jpg') || absoluteImageUrl.includes('.jpeg') ? 'image/jpeg' : 
+                   'image/png';
+
+  const metadata = {
     title: `${post.title} | Al-Asr ( Islamic Service )`,
     description: cleanExcerpt,
+    metadataBase: new URL(baseUrl),
     
     // Open Graph Meta Tags for WhatsApp/Facebook
     openGraph: {
@@ -161,10 +199,11 @@ export async function generateMetadata({ params }) {
       siteName: 'Al-Asr ( Islamic Service )',
       images: [
         {
-          url: imageUrl,
+          url: absoluteImageUrl,
           width: 1200,
           height: 630,
           alt: post.featuredImage?.node?.altText || post.title,
+          type: imageType,
         },
       ],
       locale: 'ur_PK',
@@ -178,12 +217,34 @@ export async function generateMetadata({ params }) {
       card: 'summary_large_image',
       title: post.title,
       description: cleanExcerpt,
-      images: [imageUrl],
+      images: [absoluteImageUrl],
     },
 
     // Additional Meta Tags
     alternates: {
       canonical: fullUrl,
     },
+
+    // Robots
+    robots: {
+      index: true,
+      follow: true,
+    },
+
+    // Additional OG properties for better compatibility
+    other: {
+      'og:image:type': imageType,
+      'og:image:secure_url': absoluteImageUrl,
+    }
   };
+
+  console.log('🔍 Generated Metadata for Post:', {
+    title: metadata.title,
+    description: metadata.description,
+    image: absoluteImageUrl,
+    imageType: imageType,
+    url: fullUrl
+  });
+
+  return metadata;
 }

@@ -6,7 +6,9 @@ export default function Home() {
   return (
     <>
       <Header />
-      <BlogList />
+      <main role="main"> {/* Add main landmark */}
+        <BlogList />
+      </main>
     </>
   )
 }

@@ -5,7 +5,7 @@ export const HomePageSkeleton = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Skeleton */}
-      <div className="py-5 px-5 md:px-12 lg:px-28 bg-gradient-to-b from-white to-red-50">
+      <div className="py-5 px-5 md:px-12 lg:px-28 bg-linear-to-b from-white to-red-50">
         <div className="flex justify-between items-center">
           <div className="w-[130px] sm:w-[160px] h-[60px] bg-gray-300 rounded animate-pulse"></div>
           <div className="w-0"></div>
