@@ -1,4 +1,4 @@
-// Components/BlogItem.jsx - Fixed with better error handling
+// Components/BlogItem.jsx - Updated with minimal social share
 import Link from 'next/link'
 import React, { useState, useEffect } from 'react'
 import SocialShareButtons from './SocialShareButtons'
@@ -94,12 +94,13 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug, index
         </div>
       </Link>
       
-      {/* Rest of the component remains same */}
+      {/* Category and Social Share Row - UPDATED */}
       <div className='px-5 pt-5 flex justify-between items-center'>
         <span className='inline-block bg-red-900 dark:bg-red-800 text-white text-xs px-3 py-1 rounded-full font-medium'>
           {category}
         </span>
         
+        {/* Minimal Social Share Button */}
         <div className="relative">
           <button 
             className="p-2 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
@@ -113,8 +114,9 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug, index
             </svg>
           </button>
           
+          {/* Minimal Share Dropdown - UPDATED */}
           {showSocialMenu && (
-            <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-2 min-w-[140px] z-10">
+            <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-3 z-10">
               <SocialShareButtons title={title} slug={slug} excerpt={cleanExcerpt} />
             </div>
           )}
