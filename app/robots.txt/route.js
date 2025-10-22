@@ -18,12 +18,13 @@ Disallow: /_vercel/
 
 # Sitemap
 Sitemap: ${baseUrl}/sitemap.xml
-  `.trim()
+`.trim()
 
   return new Response(robotsTxt, {
+    status: 200,
     headers: {
-      'Content-Type': 'text/plain',
-      'Cache-Control': 'public, max-age=86400', // 24 hours cache
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
     },
   })
 }

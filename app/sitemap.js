@@ -8,6 +8,8 @@ const client = new GraphQLClient('https://admin-al-asr.centers.pk/graphql');
 
 export default async function sitemap() {
   try {
+    console.log('🔄 Generating sitemap...')
+    
     // WordPress se posts fetch karo
     const posts = await fetchPosts()
     
@@ -18,7 +20,7 @@ export default async function sitemap() {
       priority: 0.8,
     }))
 
-    return [
+    const sitemapData = [
       {
         url: baseUrl,
         lastModified: new Date(),
@@ -27,8 +29,12 @@ export default async function sitemap() {
       },
       ...postUrls,
     ]
+
+    console.log('✅ Sitemap generated with', sitemapData.length, 'URLs')
+    return sitemapData
+    
   } catch (error) {
-    console.error('Sitemap generation error:', error)
+    console.error('❌ Sitemap generation error:', error)
     // Fallback - at least home page return karo
     return [
       {
