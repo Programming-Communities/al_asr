@@ -23,20 +23,24 @@
       }
     ],
     "ignoreDeprecations": "6.0",
-    "baseUrl": ".", // ✅ Yahan add karein
-    "paths": { // ✅ Yahan add karein
-      "@/*": [
-        "./*"
-      ],
-      "@/Components/*": [
-        "./Components/*"
-      ]
-    }
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@/components/*": ["./components/*"],
+      "@/app/*": ["./app/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/utils/*": ["./utils/*"],
+      "@/styles/*": ["./styles/*"],
+      "@/types/*": ["./types/*"],
+      "@/hooks/*": ["./hooks/*"]
+    },
+    "forceConsistentCasingInFileNames": true,
+    "noUncheckedIndexedAccess": true
   },
   "include": [
+    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "next-env.d.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [
