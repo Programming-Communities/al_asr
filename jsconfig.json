@@ -4,15 +4,14 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@/components/*": ["./components/*"],
+      "@/components/*": ["./components/*"],  // ✅ Make sure this has ./
       "@/app/*": ["./app/*"],
       "@/lib/*": ["./lib/*"],
       "@/public/*": ["./public/*"]
     },
-    "ignoreDeprecations": "6.0",  // ✅ Added to silence warnings
     "skipLibCheck": true,
     "lib": ["dom", "dom.iterable", "es6"],
-    "moduleResolution": "bundler",  // ✅ Changed from 'node' to 'bundler'
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "strict": false,
     "noEmit": true
