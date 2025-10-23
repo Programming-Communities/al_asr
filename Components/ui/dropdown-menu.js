@@ -51,7 +51,7 @@ const DropdownMenuContent = React.forwardRef(({ className, align = "start", ...p
     <div
       ref={ref}
       className={`
-        absolute z-50 min-w-[8rem] overflow-hidden rounded-md border bg-white p-1 shadow-md
+        absolute z-50 min-w-32 overflow-hidden rounded-md border bg-white p-1 shadow-md
         ${align === "end" ? "right-0" : "left-0"}
         ${className || ""}
       `}

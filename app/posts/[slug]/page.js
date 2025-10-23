@@ -1,6 +1,6 @@
 // app/posts/[slug]/page.js
 import { GraphQLClient } from 'graphql-request';
-import Header from '@/Components/Header'; // ✅ Capital 'C'
+import Header from '@/components/Header'; // ✅ Capital 'C'
 import { Suspense } from 'react';
 import PostClient from './PostClient';
 
