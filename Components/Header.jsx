@@ -14,7 +14,7 @@ const Header = () => {
   }, []);
 
   return (
-   <div className="py-5 px-5 md:px-12 lg:px-28 bg-linear-to-b from-white to-red-50 dark:from-gray-900 dark:to-red-950">
+    <div className="py-5 px-5 md:px-12 lg:px-28 bg-linear-to-b from-white to-red-50 dark:from-gray-900 dark:to-red-950">
 
       {/* Logo Section */}
       <div className="flex justify-between items-center">
@@ -27,16 +27,22 @@ const Header = () => {
                 alt="Al-Asr (Islamic Service)"
                 width={80}
                 height={40}
-                className="object-contain cursor-pointer hover:opacity-90 transition-opacity"
-                priority
                 sizes="(max-width: 640px) 130px, 160px"
+                priority
+                quality={75}
+                style={{
+                  objectFit: "contain",
+                  width: "auto",
+                  height: "auto",
+                }}
+                className="cursor-pointer hover:opacity-90 transition-opacity"
               />
             </Link>
           ) : (
             <div className="w-full h-full bg-gray-200 rounded animate-pulse"></div>
           )}
         </div>
-        
+
         {/* Theme Toggle Button */}
         {mounted && <ModeToggle />}
       </div>

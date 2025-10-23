@@ -132,7 +132,7 @@ const BlogItem = ({ title, excerpt, categories, featuredImage, date, slug, index
       <div className='p-5'>
         <Link href={`/posts/${slug}`}>
           <h3 
-            className={`mb-3 text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 min-h-[56px] leading-tight group-hover:text-red-700 dark:group-hover:text-red-400 transition-colors duration-200 ${
+            className={`mb-3 text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 min-h-14 leading-tight group-hover:text-red-700 dark:group-hover:text-red-400 transition-colors duration-200 ${
               isRTL ? 'text-right' : 'text-left'
             }`}
             dir={isRTL ? 'rtl' : 'ltr'}

@@ -67,7 +67,7 @@ const PostPageSkeleton = () => {
       {/* Header Skeleton */}
       <div className="py-5 px-5 md:px-12 lg:px-28 bg-linear-to-b from-white to-red-50 dark:from-gray-800 dark:to-gray-700">
         <div className="flex justify-between items-center">
-          <div className="w-[130px] sm:w-[160px] h-[60px] bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+          <div className="w-[130px] sm:w-40 h-[60px] bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
           <div className="w-0"></div>
         </div>
         

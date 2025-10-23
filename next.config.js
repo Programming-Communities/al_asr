@@ -1,56 +1,56 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    // Allow images from your WordPress media domain
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'admin-al-asr.centers.pk',
+        port: '', // explicitly empty for HTTPS
         pathname: '/**',
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'al-asr.centers.pk', // include your own domain for OG / logo
+        pathname: '/**',
+      },
     ],
-    formats: ['image/webp', 'image/avif'], // WebP first for better performance
-    minimumCacheTTL: 60, // Reduced for dynamic content
-    deviceSizes: [328, 640, 750, 828, 1080], // Added exact display size
-    imageSizes: [16, 32, 48, 64, 96],
+
+    // Optimize for WebP & AVIF (modern formats)
+    formats: ['image/avif', 'image/webp'],
+
+    // Cache images longer for CDN performance
+    minimumCacheTTL: 31536000, // 1 year
+
+    // Tailored to your actual UI sizes
+    deviceSizes: [320, 480, 640, 750, 828, 1080, 1200],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
   },
-  
-  // Performance optimizations
+
+  // ⚡ Performance optimizations
   compress: true,
   poweredByHeader: false,
-  
-  // Compiler optimizations - Remove legacy JS
+
+  // ⚙️ Compiler optimizations
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  
-  // Remove experimental features that cause issues
-  // experimental: {
-  //   optimizeCss: true,
-  //   scrollRestoration: true,
-  // },
-  
-  // Security headers with better caching
+
+  // 🚫 Disable experimental flags that might break builds
+  experimental: {
+    optimizePackageImports: ['lucide-react'], // improves tree-shaking
+  },
+
+  // 🔒 Security + Caching headers
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY'
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block'
-          },
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600'
-          },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'Cache-Control', value: 'public, max-age=3600' },
         ],
       },
       {
@@ -58,8 +58,8 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
-          }
+            value: 'public, max-age=31536000, immutable',
+          },
         ],
       },
       {
@@ -67,12 +67,12 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
-          }
+            value: 'public, max-age=31536000, immutable',
+          },
         ],
       },
-    ]
+    ];
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
