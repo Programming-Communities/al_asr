@@ -19,17 +19,16 @@ const Header = () => {
       {/* Logo Section */}
       <div className="flex justify-between items-center">
         <div className="relative w-[130px] sm:w-40 h-[60px]">
-
           {mounted ? (
             <Link href="/">
               <Image
                 src="/logo.png"
                 alt="Al-Asr (Islamic Service)"
-                width={80}
-                height={40}
+                width={160} // ✅ match the sm:w-40 (160px)
+                height={60}
                 sizes="(max-width: 640px) 130px, 160px"
                 priority
-                quality={75}
+                quality={70} // ✅ reduce slightly for smaller file
                 style={{
                   objectFit: "contain",
                   width: "auto",
@@ -42,6 +41,7 @@ const Header = () => {
             <div className="w-full h-full bg-gray-200 rounded animate-pulse"></div>
           )}
         </div>
+
 
         {/* Theme Toggle Button */}
         {mounted && <ModeToggle />}
