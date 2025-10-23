@@ -7,7 +7,7 @@ export const metadata = {
   description: "Islamic Services, Calendar Events, and Community Programs",
   metadataBase: new URL("https://al-asr.centers.pk"),
   manifest: "/manifest.json", // ✅ PWA Manifest
-  themeColor: "#991b1b", // ✅ PWA Theme Color
+
   appleWebApp: {
     capable: true, // ✅ Enable Apple PWA
     statusBarStyle: "default",
