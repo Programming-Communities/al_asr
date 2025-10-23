@@ -14,10 +14,12 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="py-5 px-5 md:px-12 lg:px-28 bg-gradient-to-b from-white to-red-50 dark:from-gray-900 dark:to-red-950">
+   <div className="py-5 px-5 md:px-12 lg:px-28 bg-linear-to-b from-white to-red-50 dark:from-gray-900 dark:to-red-950">
+
       {/* Logo Section */}
       <div className="flex justify-between items-center">
-        <div className="relative w-[130px] sm:w-[160px] h-[60px]">
+        <div className="relative w-[130px] sm:w-40 h-[60px]">
+
           {mounted ? (
             <Link href="/">
               <Image
