@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/Components/Header';
 
+
 // RTL Text Detection Function
 function isRTLText(text) {
   if (!text) return false;

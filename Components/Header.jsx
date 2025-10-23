@@ -1,5 +1,6 @@
 "use client";
 
+
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
@@ -20,19 +21,12 @@ const Header = () => {
           {mounted ? (
             <Link href="/">
               <Image
-                src="/logo.png"
+                src="/logo.webp"
                 alt="Al-Asr (Islamic Service)"
-                width={160}
-                height={60}
-                sizes="(max-width: 640px) 130px, 160px"
+                width={70}  // ✅ Change 60 to 192
+                height={40} // ✅ Change 30 to 192
+                className="cursor-pointer hover:opacity-90 transition-opacity w-auto h-auto"
                 priority
-                quality={70}
-                style={{
-                  objectFit: "contain",
-                  width: "auto",
-                  height: "auto",
-                }}
-                className="cursor-pointer hover:opacity-90 transition-opacity"
               />
             </Link>
           ) : (

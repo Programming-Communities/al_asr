@@ -5,6 +5,8 @@ import BlogItem from './BlogItem'
 import { BlogItemSkeleton } from './SkeletonLoader'
 import { getPosts, getAllCategories } from '@/lib/wordpress'
 
+
+
 const BlogList = ({ 
   showTitle = true,
   currentPostSlug = null // Exclude current post from related posts

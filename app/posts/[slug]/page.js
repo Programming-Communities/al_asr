@@ -1,8 +1,9 @@
 // app/posts/[slug]/page.js
 import { GraphQLClient } from 'graphql-request';
-import { notFound } from 'next/navigation';
+import Header from '@/Components/Header'; // ✅ Capital 'C'
 import { Suspense } from 'react';
 import PostClient from './PostClient';
+
 
 const client = new GraphQLClient('https://admin-al-asr.centers.pk/graphql');
 
